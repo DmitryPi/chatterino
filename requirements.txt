@@ -16,6 +16,7 @@ drf-spectacular==0.24.2
 factory-boy==3.2.1
 Faker==15.1.1
 channels
+channels_redis
 
 # Testing
 # ------------------------------------------------------------------------------
