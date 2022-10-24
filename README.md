@@ -6,5 +6,5 @@
 # Стек
 
 Frontend: ReactJS, Typescript
-Backend: Django 4.1, DRF, Redis
+Backend: Django 4.0, DRF, Redis
 Misc: Docker
