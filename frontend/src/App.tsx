@@ -3,21 +3,29 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Chat } from "./components/Chat";
 import { Login } from "./components/Login";
 import { Navbar } from "./components/Navbar";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AuthContextProvider } from "./contexts/AuthContext";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          path="/"
-          element={
-            <AuthContextProvider>
-              <Navbar />
-            </AuthContextProvider>
-          }
-        >
-          <Route path="" element={<Chat />} />
+        <Route path="/">
+          <Route
+            path=""
+            element={
+              <ProtectedRoute>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="chats/:conversationName"
+            element={
+              <ProtectedRoute>
+                <Chat />
+              </ProtectedRoute>
+            }
+          />
           <Route path="login" element={<Login />} />
         </Route>
       </Routes>
