@@ -28,6 +28,7 @@ django_application = get_asgi_application()
 
 # Import websocket application here, so apps from django_application are loaded first
 from config import routing  # noqa isort:skip
+from chatterino.chats.middleware import TokenAuthMiddleware  # noqa isort:skip
 
 from channels.routing import ProtocolTypeRouter, URLRouter  # noqa isort:skip
 
@@ -35,6 +36,6 @@ from channels.routing import ProtocolTypeRouter, URLRouter  # noqa isort:skip
 application = ProtocolTypeRouter(
     {
         "http": get_asgi_application(),
-        "websocket": URLRouter(routing.websocket_urlpatterns),
+        "websocket": TokenAuthMiddleware(URLRouter(routing.websocket_urlpatterns)),
     }
 )
