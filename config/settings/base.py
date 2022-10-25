@@ -52,6 +52,8 @@ ROOT_URLCONF = "config.urls"
 # https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
 WSGI_APPLICATION = "config.wsgi.application"
 
+ASGI_APPLICATION = "config.asgi.application"
+
 # APPS
 # ------------------------------------------------------------------------------
 DJANGO_APPS = [
@@ -75,11 +77,12 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
     "corsheaders",
     "drf_spectacular",
+    "channels",
 ]
 
 LOCAL_APPS = [
     "chatterino.users",
-    # Your stuff: custom apps go here
+    "chatterino.chats",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -301,5 +304,14 @@ SPECTACULAR_SETTINGS = {
         {"url": "https://example.com", "description": "Production server"},
     ],
 }
-# Your stuff...
+
+# Channel-Redis
 # ------------------------------------------------------------------------------
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [(env("REDIS_HOST"), env.int("REDIS_PORT"))],
+        },
+    },
+}

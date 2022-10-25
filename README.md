@@ -61,3 +61,29 @@ The following details how to deploy this application.
 ### Docker
 
 See detailed [cookiecutter-django Docker documentation](http://cookiecutter-django.readthedocs.io/en/latest/deployment-with-docker.html).
+
+#### Команды
+
+    $ docker-compose -f local.yml build
+
+    $ docker-compose -f local.yml up
+
+    $ set(export) COMPOSE_FILE=local.yml  (задать путь к докер конфигу)
+    $ docker-compose up
+    $ docker-compose up -d  (detached-daemon)
+
+#### Вызов команды внутри контейнера
+
+    $ docker-compose -f local.yml run --rm django python manage.py migrate
+    $ docker-compose -f local.yml run --rm django python manage.py createsuperuser
+    $ docker-compose -f local.yml run --rm django pip install
+
+#### Ребилд
+
+    $ docker-compose -f local.yml up --build
+
+#### Bash
+
+    $ docker-compose -f local.yml run django bash
+    $ docker-compose -f local.yml exec django bash
+    $ exit
