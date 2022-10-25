@@ -1,12 +1,12 @@
 """
-ASGI config for microservices project.
+ASGI config for Chatterino project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
 For more information on this file, see
-https://docs.djangoproject.com/en/4.1/howto/deployment/asgi/
-"""
+https://docs.djangoproject.com/en/dev/howto/deployment/asgi/
 
+"""
 import os
 import sys
 from pathlib import Path
@@ -14,28 +14,27 @@ from pathlib import Path
 from django.core.asgi import get_asgi_application
 
 # This allows easy placement of apps within the interior
-# conversa_dj directory.
-
+# chatterino directory.
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent
 sys.path.append(str(ROOT_DIR / "chatterino"))
 
-# If DJANGO_SETTINGS_MODULE is unset, default to the base settings
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.base")
+# If DJANGO_SETTINGS_MODULE is unset, default to the local settings
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.local")
 
 # This application object is used by any ASGI server configured to use this file.
 django_application = get_asgi_application()
-
+# Apply ASGI middleware here.
+# from helloworld.asgi import HelloWorldApplication
+# application = HelloWorldApplication(application)
 
 # Import websocket application here, so apps from django_application are loaded first
-from config import routing  # noqa isort:skip
-from chatterino.chats.middleware import TokenAuthMiddleware  # noqa isort:skip
-
-from channels.routing import ProtocolTypeRouter, URLRouter  # noqa isort:skip
+from config.websocket import websocket_application  # noqa isort:skip
 
 
-application = ProtocolTypeRouter(
-    {
-        "http": get_asgi_application(),
-        "websocket": TokenAuthMiddleware(URLRouter(routing.websocket_urlpatterns)),
-    }
-)
+async def application(scope, receive, send):
+    if scope["type"] == "http":
+        await django_application(scope, receive, send)
+    elif scope["type"] == "websocket":
+        await websocket_application(scope, receive, send)
+    else:
+        raise NotImplementedError(f"Unknown scope type {scope['type']}")

@@ -1,5 +1,4 @@
-# Redis
+# General
 # ------------------------------------------------------------------------------
-REDIS_URL=redis://redis:6379/0
-REDIS_HOST=redis
-REDIS_PORT=6379
+USE_DOCKER=yes
+IPYTHONDIR=/app/.ipython
